@@ -94,7 +94,7 @@ float modbus_read_sensor(uint16_t address, sensor_type_t type) {
 
     switch (type) {
         case SENSOR_TEMPERATURE:
-            base = 45.0f + (address * 5.0f);
+            base = 65.0f;
             variation = (float)(rand() % 200 - 100) / 10.0f;
             return base + variation;
 
