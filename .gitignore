@@ -1,0 +1,5 @@
+# Compiled binaries
+*.o
+bridge-engine
+__pycache__/
+*.pyc
