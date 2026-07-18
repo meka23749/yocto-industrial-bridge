@@ -1,0 +1,84 @@
+name: Build Industrial Bridge
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build-app:
+    name: Build Bridge Engine (C)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Compile bridge-engine
+        run: |
+          cd meta-steve-embedded/recipes-app/bridge-engine/files
+          make
+          echo "Build successful"
+
+      - name: Run bridge-engine test
+        run: |
+          cd meta-steve-embedded/recipes-app/bridge-engine/files
+          ./bridge-engine 2
+          echo "Test passed"
+
+  test-dashboard:
+    name: Test Web Dashboard (Python)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Python dependencies
+        run: pip install flask
+
+      - name: Test Flask app imports
+        run: |
+          cd meta-steve-embedded/recipes-app/web-dashboard/files
+          python3 -c "from app import app; print('Flask app OK')"
+
+      - name: Test API endpoint
+        run: |
+          cd meta-steve-embedded/recipes-app/web-dashboard/files
+          python3 -c "
+          from app import app
+          client = app.test_client()
+          r = client.get('/api/health')
+          assert r.status_code == 200
+          print('API health check OK')
+          r = client.get('/api/sensors')
+          assert r.status_code == 200
+          print('API sensors check OK')
+          "
+
+  lint:
+    name: Code Quality Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check C code with cppcheck
+        run: |
+          sudo apt-get install -y cppcheck
+          cppcheck --error-exitcode=1 \
+            meta-steve-embedded/recipes-app/bridge-engine/files/bridge_engine.c
+          echo "C code quality OK"
+
+      - name: Check Yocto recipe syntax
+        run: |
+          for recipe in $(find meta-steve-embedded -name "*.bb"); do
+            echo "Checking: $recipe"
+            if [ ! -s "$recipe" ]; then
+              echo "ERROR: Empty recipe!"
+              exit 1
+            fi
+          done
+          echo "Yocto recipes OK"
