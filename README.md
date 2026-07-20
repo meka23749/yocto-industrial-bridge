@@ -137,7 +137,6 @@ Three parallel jobs on every push:
 
 ## Author
 
-**Steve Meka** — Embedded Software Engineer
+**Steve Meka**
 
 - Website: [stevkmef.com](https://www.stevkmef.com)
-- GitHub: [meka23749](https://github.com/meka23749)
