@@ -6,20 +6,22 @@ Built from scratch with a custom Yocto layer, Dockerized build environment, and 
 
 ## What it does
 
-Modbus TCP Devices MQTT Broker / Cloud
-(sensors, PLCs) (mosquitto)
-| ^
-v |
-+-----------+ +-------------+ |
-| Modbus |--->| Bridge |---+
-| Client | | Engine (C) |
-+-----------+ +-------------+
-|
-+-----------+
-| REST API |
-| Dashboard |
-| (Flask) |
-+-----------+
+```text
+     Modbus TCP Devices                     MQTT Broker / Cloud
+      (sensors, PLCs)                         (Mosquitto)
+             |                                     ^
+             v                                     |
+    +----------------+                    +----------------+
+    | Modbus Client  | -----------------> | Bridge Engine  |
+    +----------------+                    |      (C)       |
+                                          +----------------+
+                                                   |
+                                                   v
+                     +----------------+   +----------------+
+                     |   REST API     |   |   Dashboard    |
+                     |    (Flask)     |   +----------------+
+                     +----------------+
+```
 
 **Bridge Engine** reads 4 industrial sensors via Modbus TCP, monitors thresholds, triggers alarms, and publishes JSON data to MQTT topics.
 
@@ -45,23 +47,32 @@ v |
 
 ## Project Structure
 
+```text
 yocto-industrial-bridge/
-├── meta-steve-embedded/ # Custom Yocto layer
-│ ├── conf/layer.conf # Layer configuration
-│ ├── recipes-app/
-│ │ ├── bridge-engine/ # C application recipe
-│ │ │ ├── bridge-engine_1.0.bb
-│ │ │ └── files/
-│ │ │ ├── bridge_engine.c
-│ │ │ └── Makefile
-│ │ └── web-dashboard/ # Flask dashboard recipe
-│ │ └── files/app.py
-│ └── recipes-core/images/
-│ └── bridge-image.bb # Custom image definition
-├── docker/Dockerfile # Reproducible build environment
-├── scripts/docker-build.sh # Build automation script
-├── docs/ # Screenshots and diagrams
-└── .github/workflows/build.yml # CI/CD pipeline
+├── meta-steve-embedded/              # Custom Yocto layer
+│   ├── conf/
+│   │   └── layer.conf                # Layer configuration
+│   ├── recipes-app/
+│   │   ├── bridge-engine/            # C application recipe
+│   │   │   ├── bridge-engine_1.0.bb
+│   │   │   └── files/
+│   │   │       ├── bridge_engine.c
+│   │   │       └── Makefile
+│   │   └── web-dashboard/            # Flask dashboard recipe
+│   │       └── files/
+│   │           └── app.py
+│   └── recipes-core/
+│       └── images/
+│           └── bridge-image.bb       # Custom image definition
+├── docker/
+│   └── Dockerfile                    # Reproducible build environment
+├── scripts/
+│   └── docker-build.sh               # Build automation script
+├── docs/                             # Screenshots and diagrams
+└── .github/
+    └── workflows/
+        └── build.yml                 # CI/CD pipeline
+```
 
 ## Quick Start
 
