@@ -1,5 +1,5 @@
-CC = gcc
-CFLAGS = -Wall -Wextra -std=c11
+CC ?= gcc
+CFLAGS ?= -Wall -Wextra -std=c11
 TARGET = bridge-engine
 
 all: $(TARGET)
