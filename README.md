@@ -1,4 +1,4 @@
-# Industrial Protocol Bridge (Yocto ARM64)
+# Protocol Bridge (Yocto ARM64)
 
 A custom Yocto-based embedded Linux system that bridges legacy industrial protocols (Modbus TCP) to modern IoT protocols (MQTT), enabling Industry 4.0 connectivity.
 
@@ -23,7 +23,7 @@ Built from scratch with a custom Yocto layer, Dockerized build environment, and 
                      +----------------+
 ```
 
-**Bridge Engine** reads 4 industrial sensors via Modbus TCP, monitors thresholds, triggers alarms, and publishes JSON data to MQTT topics.
+**Bridge Engine** reads 4 sensors via Modbus TCP, monitors thresholds, triggers alarms, and publishes JSON data to MQTT topics.
 
 **Web Dashboard** provides real-time visualization of all sensor values, alarm states, and system status.
 
@@ -43,7 +43,7 @@ Built from scratch with a custom Yocto layer, Dockerized build environment, and 
 - **Web Dashboard**: Python Flask (REST API, real-time UI)
 - **Build**: Dockerized Yocto build environment
 - **CI/CD**: GitHub Actions (build, test, lint)
-- **Target**: QEMU ARM64 (emulated ARM Cortex-A53), portable to BeagleY-AI
+- **Target**: QEMU ARM64 (emulated ARM Cortex-A53), portable to Raspberry Pi
 
 ## Project Structure
 
